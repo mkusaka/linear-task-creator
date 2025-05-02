@@ -18,7 +18,7 @@ import { Textarea } from "./components/ui/textarea";
 export function App() {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
-      const [description, setDescription] = useState("");
+  const [description, setDescription] = useState("");
   const [apiKey, setApiKey] = useState<string>();
   const [projects, setProjects] = useState<Project[]>([]);
   const [users, setUsers] = useState<User[]>([]);

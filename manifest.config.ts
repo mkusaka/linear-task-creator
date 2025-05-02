@@ -10,7 +10,7 @@ export default defineManifest({
     default_popup: "index.html",
   },
   options_ui: {
-    page: "settings.html", 
-    open_in_tab: false, 
+    page: "settings.html",
+    open_in_tab: false,
   },
 });
