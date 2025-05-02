@@ -6,14 +6,19 @@ import manifest from './manifest.config'
 import path from 'path'
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-    crx({ manifest })
-  ],
+  plugins: [react(), tailwindcss(), crx({ manifest })],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@linear/sdk": "@linear/sdk/dist/index-umd.min.js",
     },
-  }
-})
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        popup: "index.html",
+        settings: "settings.html",
+      },
+    },
+  },
+});
