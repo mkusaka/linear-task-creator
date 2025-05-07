@@ -14,6 +14,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { load, save } from "@/storage";
 import { Input } from "./components/ui/input";
 import { Textarea } from "./components/ui/textarea";
+import { Loader2 } from "lucide-react";
 
 export function App() {
   const [url, setUrl] = useState("");
@@ -26,6 +27,7 @@ export function App() {
   const [teamId, setTeamId] = useState<string>();
   const [projectId, setProjectId] = useState<string>();
   const [assigneeId, setAssigneeId] = useState<string>();
+  const [isCreating, setIsCreating] = useState(false);
 
   // Load current tab
   useEffect(() => {
@@ -60,6 +62,7 @@ export function App() {
 
   const createIssue = async () => {
     if (!apiKey || !projectId || !teamId) return;
+    setIsCreating(true);
     const client = new LinearClient({ apiKey });
     try {
       await client.createIssue({
@@ -75,6 +78,8 @@ export function App() {
       toast.success("Issue created!");
     } catch {
       toast.error("Failed to create issue");
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -152,7 +157,8 @@ export function App() {
         />
       </div>
 
-      <Button onClick={createIssue} disabled={!apiKey || !projectId || !teamId}>
+      <Button onClick={createIssue} disabled={!apiKey || !projectId || !teamId || isCreating} className="flex items-center gap-2">
+        {isCreating && <Loader2 className="animate-spin w-4 h-4" />}
         Create Issue
       </Button>
       <div className="text-right pt-2">
