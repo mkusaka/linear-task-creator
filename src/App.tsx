@@ -43,6 +43,7 @@ export function App() {
     load<string>("linearApiKey").then(setApiKey);
     load<string>("lastProjectId").then(setProjectId);
     load<string>("lastAssigneeId").then(setAssigneeId);
+    load<string>("lastTeamId").then(setTeamId);
   }, []);
 
   // Fetch projects & users once we have an API key
@@ -70,6 +71,7 @@ export function App() {
       });
       save("lastProjectId", projectId);
       save("lastAssigneeId", assigneeId);
+      save("lastTeamId", teamId);
       toast.success("Issue created!");
     } catch {
       toast.error("Failed to create issue");
