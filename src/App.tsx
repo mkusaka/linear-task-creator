@@ -1,6 +1,6 @@
 // src/popup/App.tsx
 import { useState, useEffect } from "react";
-import { LinearClient, Project, Team, User } from "@linear/sdk";
+import { LinearClient, Project, Team, User, WorkflowState } from "@linear/sdk";
 import {
   Select,
   SelectContent,
@@ -24,9 +24,11 @@ export function App() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
+  const [workflowStates, setWorkflowStates] = useState<WorkflowState[]>([]);
   const [teamId, setTeamId] = useState<string>();
   const [projectId, setProjectId] = useState<string>();
   const [assigneeId, setAssigneeId] = useState<string>();
+  const [stateId, setStateId] = useState<string>();
   const [isCreating, setIsCreating] = useState(false);
 
   // Load current tab
@@ -46,9 +48,10 @@ export function App() {
     load<string>("lastProjectId").then(setProjectId);
     load<string>("lastAssigneeId").then(setAssigneeId);
     load<string>("lastTeamId").then(setTeamId);
+    load<string>("lastStateId").then(setStateId);
   }, []);
 
-  // Fetch projects & users once we have an API key
+  // Fetch projects, users & workflow states once we have an API key
   useEffect(() => {
     if (!apiKey) return;
     const client = new LinearClient({ apiKey });
@@ -58,6 +61,7 @@ export function App() {
     client.teams().then((t) => setTeams(t.nodes));
     client.projects().then((p) => setProjects(p.nodes));
     client.users().then((u) => setUsers(u.nodes));
+    client.workflowStates().then((ws) => setWorkflowStates(ws.nodes));
   }, [apiKey]);
 
   const createIssue = async () => {
@@ -71,10 +75,12 @@ export function App() {
         description: `URL: ${url}`,
         projectId,
         assigneeId,
+        stateId,
       });
       save("lastProjectId", projectId);
       save("lastAssigneeId", assigneeId);
       save("lastTeamId", teamId);
+      save("lastStateId", stateId);
       toast.success("Issue created!");
     } catch {
       toast.error("Failed to create issue");
@@ -132,6 +138,23 @@ export function App() {
             {teams.map((t) => (
               <SelectItem key={t.id} value={t.id}>
                 {t.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Status Selector */}
+      <div>
+        <label className="block mb-1">Status</label>
+        <Select value={stateId} onValueChange={setStateId}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select a status…" />
+          </SelectTrigger>
+          <SelectContent>
+            {workflowStates.map((state) => (
+              <SelectItem key={state.id} value={state.id}>
+                {state.name}
               </SelectItem>
             ))}
           </SelectContent>
