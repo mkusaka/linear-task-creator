@@ -20,15 +20,15 @@ export function App() {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [apiKey, setApiKey] = useState<string>();
+  const [apiKey, setApiKey] = useState<string>("");
   const [projects, setProjects] = useState<Project[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [workflowStates, setWorkflowStates] = useState<WorkflowState[]>([]);
-  const [teamId, setTeamId] = useState<string>();
-  const [projectId, setProjectId] = useState<string>();
-  const [assigneeId, setAssigneeId] = useState<string>();
-  const [stateId, setStateId] = useState<string>();
+  const [teamId, setTeamId] = useState<string>("");
+  const [projectId, setProjectId] = useState<string>("");
+  const [assigneeId, setAssigneeId] = useState<string>("");
+  const [stateId, setStateId] = useState<string>("");
   const [isCreating, setIsCreating] = useState(false);
 
   // Load current tab
@@ -44,11 +44,11 @@ export function App() {
 
   // Load API key & last selections
   useEffect(() => {
-    load<string>("linearApiKey").then(setApiKey);
-    load<string>("lastProjectId").then(setProjectId);
-    load<string>("lastAssigneeId").then(setAssigneeId);
-    load<string>("lastTeamId").then(setTeamId);
-    load<string>("lastStateId").then(setStateId);
+    load<string>("linearApiKey").then(val => val !== undefined ? setApiKey(val) : null);
+    load<string>("lastProjectId").then(val => val !== undefined ? setProjectId(val) : null);
+    load<string>("lastAssigneeId").then(val => val !== undefined ? setAssigneeId(val) : null);
+    load<string>("lastTeamId").then(val => val !== undefined ? setTeamId(val) : null);
+    load<string>("lastStateId").then(val => val !== undefined ? setStateId(val) : null);
   }, []);
 
   // Fetch projects, users & workflow states once we have an API key
@@ -74,8 +74,8 @@ export function App() {
         title: title,
         description: `URL: ${url}`,
         projectId,
-        assigneeId,
-        stateId,
+        assigneeId: assigneeId || undefined,
+        stateId: stateId || undefined,
       });
       save("lastProjectId", projectId);
       save("lastAssigneeId", assigneeId);
