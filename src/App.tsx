@@ -89,6 +89,27 @@ export function App() {
     }
   };
 
+  if (!apiKey) {
+    return (
+      <div className="p-4 space-y-3 w-80">
+        <h2 className="text-xl">New Linear Task</h2>
+        <div className="text-center py-8">
+          <p className="text-gray-600 mb-4">
+            Linear API key is not set.
+          </p>
+          <Button
+            onClick={() => {
+              chrome.runtime.openOptionsPage();
+            }}
+          >
+            Go to Settings
+          </Button>
+        </div>
+        <Toaster richColors position="bottom-right" />
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 space-y-3 w-80">
       <h2 className="text-xl">New Linear Task</h2>
