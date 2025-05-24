@@ -67,13 +67,38 @@ export function App() {
     if (!apiKey) return;
     const client = new LinearClient({ apiKey });
     client.viewer.then((me) => {
-      return me.teams().then((t) => setTeams(t.nodes));
+      return me.teams().then((t) => {
+        setTeams(t.nodes);
+        if (t.nodes.length === 1 && !teamId) {
+          setTeamId(t.nodes[0].id);
+        }
+      });
     });
-    client.teams().then((t) => setTeams(t.nodes));
-    client.projects().then((p) => setProjects(p.nodes));
-    client.users().then((u) => setUsers(u.nodes));
-    client.workflowStates().then((ws) => setWorkflowStates(ws.nodes));
-  }, [apiKey]);
+    client.teams().then((t) => {
+      setTeams(t.nodes);
+      if (t.nodes.length === 1 && !teamId) {
+        setTeamId(t.nodes[0].id);
+      }
+    });
+    client.projects().then((p) => {
+      setProjects(p.nodes);
+      if (p.nodes.length === 1 && !projectId) {
+        setProjectId(p.nodes[0].id);
+      }
+    });
+    client.users().then((u) => {
+      setUsers(u.nodes);
+      if (u.nodes.length === 1 && !assigneeId) {
+        setAssigneeId(u.nodes[0].id);
+      }
+    });
+    client.workflowStates().then((ws) => {
+      setWorkflowStates(ws.nodes);
+      if (ws.nodes.length === 1 && !stateId) {
+        setStateId(ws.nodes[0].id);
+      }
+    });
+  }, [apiKey, teamId, projectId, assigneeId, stateId]);
 
   const createIssue = async () => {
     if (!apiKey || !projectId || !teamId) return;
