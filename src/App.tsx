@@ -16,11 +16,14 @@ import { Input } from "./components/ui/input";
 import { Textarea } from "./components/ui/textarea";
 import { Loader2 } from "lucide-react";
 
+type ApiKeyState = 'init' | 'loading' | 'success' | 'failed';
+
 export function App() {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [apiKey, setApiKey] = useState<string>("");
+  const [apiKeyState, setApiKeyState] = useState<ApiKeyState>('init');
   const [projects, setProjects] = useState<Project[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
@@ -44,7 +47,15 @@ export function App() {
 
   // Load API key & last selections
   useEffect(() => {
-    load<string>("linearApiKey").then(val => val !== undefined ? setApiKey(val) : null);
+    setApiKeyState('loading');
+    load<string>("linearApiKey").then(val => {
+      if (val !== undefined && val !== '') {
+        setApiKey(val);
+        setApiKeyState('success');
+      } else {
+        setApiKeyState('failed');
+      }
+    });
     load<string>("lastProjectId").then(val => val !== undefined ? setProjectId(val) : null);
     load<string>("lastAssigneeId").then(val => val !== undefined ? setAssigneeId(val) : null);
     load<string>("lastTeamId").then(val => val !== undefined ? setTeamId(val) : null);
@@ -89,7 +100,20 @@ export function App() {
     }
   };
 
-  if (!apiKey) {
+  if (apiKeyState === 'init' || apiKeyState === 'loading') {
+    return (
+      <div className="p-4 space-y-3 w-80">
+        <h2 className="text-xl">New Linear Task</h2>
+        <div className="text-center py-8">
+          <Loader2 className="animate-spin w-8 h-8 mx-auto text-gray-400" />
+          <p className="text-gray-600 mt-4">Loading...</p>
+        </div>
+        <Toaster richColors position="bottom-right" />
+      </div>
+    );
+  }
+
+  if (apiKeyState === 'failed') {
     return (
       <div className="p-4 space-y-3 w-80">
         <h2 className="text-xl">New Linear Task</h2>
