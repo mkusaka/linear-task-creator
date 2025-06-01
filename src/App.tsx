@@ -105,7 +105,7 @@ export function App() {
     setIsCreating(true);
     const client = new LinearClient({ apiKey });
     try {
-      await client.createIssue({
+      const issue = await client.createIssue({
         teamId,
         title: title,
         description: `URL: ${url}`,
@@ -113,11 +113,28 @@ export function App() {
         assigneeId: assigneeId || undefined,
         stateId: stateId || undefined,
       });
+      
+      // Get the created issue data
+      const createdIssue = await issue.issue;
+      const identifier = createdIssue?.identifier;
+      
+      // Copy identifier to clipboard
+      if (identifier) {
+        try {
+          await navigator.clipboard.writeText(identifier);
+          toast.success(`Issue ${identifier} created and copied to clipboard!`);
+        } catch (clipboardError) {
+          console.error("Failed to copy to clipboard:", clipboardError);
+          toast.success(`Issue ${identifier} created!`);
+        }
+      } else {
+        toast.success("Issue created!");
+      }
+      
       save("lastProjectId", projectId);
       save("lastAssigneeId", assigneeId);
       save("lastTeamId", teamId);
       save("lastStateId", stateId);
-      toast.success("Issue created!");
     } catch {
       toast.error("Failed to create issue");
     } finally {
