@@ -1,13 +1,6 @@
 // src/popup/App.tsx
 import { useState, useEffect } from "react";
-import { LinearClient, Project, Team, User, WorkflowState } from "@linear/sdk";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { LinearClient } from "@linear/sdk";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
@@ -15,6 +8,13 @@ import { load, save } from "@/storage";
 import { Input } from "./components/ui/input";
 import { Textarea } from "./components/ui/textarea";
 import { Loader2 } from "lucide-react";
+import { 
+  ProjectSelector, 
+  TeamSelector, 
+  UserSelector, 
+  WorkflowStateSelector 
+} from "@/components/LinearSelectors";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 type ApiKeyState = 'init' | 'loading' | 'success' | 'failed';
 
@@ -24,10 +24,6 @@ export function App() {
   const [description, setDescription] = useState("");
   const [apiKey, setApiKey] = useState<string>("");
   const [apiKeyState, setApiKeyState] = useState<ApiKeyState>('init');
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
-  const [teams, setTeams] = useState<Team[]>([]);
-  const [workflowStates, setWorkflowStates] = useState<WorkflowState[]>([]);
   const [teamId, setTeamId] = useState<string>("");
   const [projectId, setProjectId] = useState<string>("");
   const [assigneeId, setAssigneeId] = useState<string>("");
@@ -62,43 +58,7 @@ export function App() {
     load<string>("lastStateId").then(val => val !== undefined ? setStateId(val) : null);
   }, []);
 
-  // Fetch projects, users & workflow states once we have an API key
-  useEffect(() => {
-    if (!apiKey) return;
-    const client = new LinearClient({ apiKey });
-    client.viewer.then((me) => {
-      return me.teams().then((t) => {
-        setTeams(t.nodes);
-        if (t.nodes.length === 1 && !teamId) {
-          setTeamId(t.nodes[0].id);
-        }
-      });
-    });
-    client.teams().then((t) => {
-      setTeams(t.nodes);
-      if (t.nodes.length === 1 && !teamId) {
-        setTeamId(t.nodes[0].id);
-      }
-    });
-    client.projects().then((p) => {
-      setProjects(p.nodes);
-      if (p.nodes.length === 1 && !projectId) {
-        setProjectId(p.nodes[0].id);
-      }
-    });
-    client.users().then((u) => {
-      setUsers(u.nodes);
-      if (u.nodes.length === 1 && !assigneeId) {
-        setAssigneeId(u.nodes[0].id);
-      }
-    });
-    client.workflowStates().then((ws) => {
-      setWorkflowStates(ws.nodes);
-      if (ws.nodes.length === 1 && !stateId) {
-        setStateId(ws.nodes[0].id);
-      }
-    });
-  }, [apiKey, teamId, projectId, assigneeId, stateId]);
+
 
   const createIssue = async () => {
     if (!apiKey || !projectId || !teamId) return;
@@ -180,73 +140,27 @@ export function App() {
     <div className="p-4 space-y-3 w-80">
       <h2 className="text-xl">New Linear Task</h2>
 
-      {/* Project Selector */}
-      <div>
-        <label className="block mb-1">Project</label>
-        <Select value={projectId} onValueChange={setProjectId}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select a project…" />
-          </SelectTrigger>
-          <SelectContent>
-            {projects.map((p) => (
-              <SelectItem key={p.id} value={p.id}>
-                {p.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <ErrorBoundary>
+        <div>
+          <label className="block mb-1">Project</label>
+          <ProjectSelector value={projectId} onValueChange={setProjectId} />
+        </div>
 
-      {/* Assignee Selector */}
-      <div>
-        <label className="block mb-1">Assignee</label>
-        <Select value={assigneeId} onValueChange={setAssigneeId}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select an assignee…" />
-          </SelectTrigger>
-          <SelectContent>
-            {users.map((u) => (
-              <SelectItem key={u.id} value={u.id}>
-                {u.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+        <div>
+          <label className="block mb-1">Assignee</label>
+          <UserSelector value={assigneeId} onValueChange={setAssigneeId} />
+        </div>
 
-      {/* Team Selector */}
-      <div>
-        <label className="block mb-1">Team</label>
-        <Select value={teamId} onValueChange={setTeamId}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select a team…" />
-          </SelectTrigger>
-          <SelectContent>
-            {teams.map((t) => (
-              <SelectItem key={t.id} value={t.id}>
-                {t.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+        <div>
+          <label className="block mb-1">Team</label>
+          <TeamSelector value={teamId} onValueChange={setTeamId} />
+        </div>
 
-      {/* Status Selector */}
-      <div>
-        <label className="block mb-1">Status</label>
-        <Select value={stateId} onValueChange={setStateId}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select a status…" />
-          </SelectTrigger>
-          <SelectContent>
-            {workflowStates.map((state) => (
-              <SelectItem key={state.id} value={state.id}>
-                {state.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+        <div>
+          <label className="block mb-1">Status</label>
+          <WorkflowStateSelector value={stateId} onValueChange={setStateId} />
+        </div>
+      </ErrorBoundary>
 
       <div>
         <label className="block mb-1">Title</label>
