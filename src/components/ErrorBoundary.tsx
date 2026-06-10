@@ -23,17 +23,19 @@ export class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback || (
-        <div className="p-4 text-center">
-          <p className="text-red-600 mb-2">Failed to load Linear data</p>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => this.setState({ hasError: false })}
-          >
-            Retry
-          </Button>
-        </div>
+      return (
+        this.props.fallback || (
+          <div className="p-4 text-center">
+            <p className="text-red-600 mb-2">Failed to load Linear data</p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => this.setState({ hasError: false })}
+            >
+              Retry
+            </Button>
+          </div>
+        )
       );
     }
 

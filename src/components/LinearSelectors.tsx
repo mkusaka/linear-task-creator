@@ -7,24 +7,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
-import { 
-  useLinearProjects, 
-  useLinearTeams, 
-  useLinearUsers, 
+import {
+  useLinearProjects,
+  useLinearTeams,
+  useLinearUsers,
   useLinearWorkflowStates,
-  useAutoSelection 
+  useAutoSelection,
 } from "@/hooks/useLinearData";
 
-function ProjectSelectorContent({ 
-  value, 
-  onValueChange 
-}: { 
-  value: string; 
-  onValueChange: (value: string) => void; 
+function ProjectSelectorContent({
+  value,
+  onValueChange,
+}: {
+  value: string;
+  onValueChange: (value: string) => void;
 }) {
   const projects = use(useLinearProjects());
   useAutoSelection(projects, value, onValueChange);
-  
+
   return (
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger>
@@ -41,16 +41,16 @@ function ProjectSelectorContent({
   );
 }
 
-function TeamSelectorContent({ 
-  value, 
-  onValueChange 
-}: { 
-  value: string; 
-  onValueChange: (value: string) => void; 
+function TeamSelectorContent({
+  value,
+  onValueChange,
+}: {
+  value: string;
+  onValueChange: (value: string) => void;
 }) {
   const teams = use(useLinearTeams());
   useAutoSelection(teams, value, onValueChange);
-  
+
   return (
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger>
@@ -67,16 +67,16 @@ function TeamSelectorContent({
   );
 }
 
-function UserSelectorContent({ 
-  value, 
-  onValueChange 
-}: { 
-  value: string; 
-  onValueChange: (value: string) => void; 
+function UserSelectorContent({
+  value,
+  onValueChange,
+}: {
+  value: string;
+  onValueChange: (value: string) => void;
 }) {
   const users = use(useLinearUsers());
   useAutoSelection(users, value, onValueChange);
-  
+
   return (
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger>
@@ -93,16 +93,16 @@ function UserSelectorContent({
   );
 }
 
-function WorkflowStateSelectorContent({ 
-  value, 
-  onValueChange 
-}: { 
-  value: string; 
-  onValueChange: (value: string) => void; 
+function WorkflowStateSelectorContent({
+  value,
+  onValueChange,
+}: {
+  value: string;
+  onValueChange: (value: string) => void;
 }) {
   const workflowStates = use(useLinearWorkflowStates());
   useAutoSelection(workflowStates, value, onValueChange);
-  
+
   return (
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger>
@@ -125,7 +125,10 @@ const LoadingFallback = () => (
   </div>
 );
 
-export function ProjectSelector(props: { value: string; onValueChange: (value: string) => void }) {
+export function ProjectSelector(props: {
+  value: string;
+  onValueChange: (value: string) => void;
+}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ProjectSelectorContent {...props} />
@@ -133,7 +136,10 @@ export function ProjectSelector(props: { value: string; onValueChange: (value: s
   );
 }
 
-export function TeamSelector(props: { value: string; onValueChange: (value: string) => void }) {
+export function TeamSelector(props: {
+  value: string;
+  onValueChange: (value: string) => void;
+}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <TeamSelectorContent {...props} />
@@ -141,7 +147,10 @@ export function TeamSelector(props: { value: string; onValueChange: (value: stri
   );
 }
 
-export function UserSelector(props: { value: string; onValueChange: (value: string) => void }) {
+export function UserSelector(props: {
+  value: string;
+  onValueChange: (value: string) => void;
+}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <UserSelectorContent {...props} />
@@ -149,7 +158,10 @@ export function UserSelector(props: { value: string; onValueChange: (value: stri
   );
 }
 
-export function WorkflowStateSelector(props: { value: string; onValueChange: (value: string) => void }) {
+export function WorkflowStateSelector(props: {
+  value: string;
+  onValueChange: (value: string) => void;
+}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <WorkflowStateSelectorContent {...props} />
