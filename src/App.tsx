@@ -8,22 +8,22 @@ import { load, save } from "@/storage";
 import { Input } from "./components/ui/input";
 import { Textarea } from "./components/ui/textarea";
 import { Loader2 } from "lucide-react";
-import { 
-  ProjectSelector, 
-  TeamSelector, 
-  UserSelector, 
-  WorkflowStateSelector 
+import {
+  ProjectSelector,
+  TeamSelector,
+  UserSelector,
+  WorkflowStateSelector,
 } from "@/components/LinearSelectors";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
-type ApiKeyState = 'init' | 'loading' | 'success' | 'failed';
+type ApiKeyState = "init" | "loading" | "success" | "failed";
 
 export function App() {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [apiKey, setApiKey] = useState<string>("");
-  const [apiKeyState, setApiKeyState] = useState<ApiKeyState>('init');
+  const [apiKeyState, setApiKeyState] = useState<ApiKeyState>("init");
   const [teamId, setTeamId] = useState<string>("");
   const [projectId, setProjectId] = useState<string>("");
   const [assigneeId, setAssigneeId] = useState<string>("");
@@ -43,22 +43,28 @@ export function App() {
 
   // Load API key & last selections
   useEffect(() => {
-    setApiKeyState('loading');
-    load<string>("linearApiKey").then(val => {
-      if (val !== undefined && val !== '') {
+    setApiKeyState("loading");
+    load<string>("linearApiKey").then((val) => {
+      if (val !== undefined && val !== "") {
         setApiKey(val);
-        setApiKeyState('success');
+        setApiKeyState("success");
       } else {
-        setApiKeyState('failed');
+        setApiKeyState("failed");
       }
     });
-    load<string>("lastProjectId").then(val => val !== undefined ? setProjectId(val) : null);
-    load<string>("lastAssigneeId").then(val => val !== undefined ? setAssigneeId(val) : null);
-    load<string>("lastTeamId").then(val => val !== undefined ? setTeamId(val) : null);
-    load<string>("lastStateId").then(val => val !== undefined ? setStateId(val) : null);
+    load<string>("lastProjectId").then((val) =>
+      val !== undefined ? setProjectId(val) : null,
+    );
+    load<string>("lastAssigneeId").then((val) =>
+      val !== undefined ? setAssigneeId(val) : null,
+    );
+    load<string>("lastTeamId").then((val) =>
+      val !== undefined ? setTeamId(val) : null,
+    );
+    load<string>("lastStateId").then((val) =>
+      val !== undefined ? setStateId(val) : null,
+    );
   }, []);
-
-
 
   const createIssue = async () => {
     if (!apiKey || !projectId || !teamId) return;
@@ -73,11 +79,11 @@ export function App() {
         assigneeId: assigneeId || undefined,
         stateId: stateId || undefined,
       });
-      
+
       // Get the created issue data
       const createdIssue = await issue.issue;
       const identifier = createdIssue?.identifier;
-      
+
       // Copy identifier to clipboard
       if (identifier) {
         try {
@@ -90,7 +96,7 @@ export function App() {
       } else {
         toast.success("Issue created!");
       }
-      
+
       save("lastProjectId", projectId);
       save("lastAssigneeId", assigneeId);
       save("lastTeamId", teamId);
@@ -102,7 +108,7 @@ export function App() {
     }
   };
 
-  if (apiKeyState === 'init' || apiKeyState === 'loading') {
+  if (apiKeyState === "init" || apiKeyState === "loading") {
     return (
       <div className="p-4 space-y-3 w-80">
         <h2 className="text-xl">New Linear Task</h2>
@@ -115,14 +121,12 @@ export function App() {
     );
   }
 
-  if (apiKeyState === 'failed') {
+  if (apiKeyState === "failed") {
     return (
       <div className="p-4 space-y-3 w-80">
         <h2 className="text-xl">New Linear Task</h2>
         <div className="text-center py-8">
-          <p className="text-gray-600 mb-4">
-            Linear API key is not set.
-          </p>
+          <p className="text-gray-600 mb-4">Linear API key is not set.</p>
           <Button
             onClick={() => {
               chrome.runtime.openOptionsPage();
@@ -181,7 +185,11 @@ export function App() {
         />
       </div>
 
-      <Button onClick={createIssue} disabled={!apiKey || !projectId || !teamId || isCreating} className="flex items-center gap-2">
+      <Button
+        onClick={createIssue}
+        disabled={!apiKey || !projectId || !teamId || isCreating}
+        className="flex items-center gap-2"
+      >
         {isCreating && <Loader2 className="animate-spin w-4 h-4" />}
         Create Issue
       </Button>

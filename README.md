@@ -4,20 +4,20 @@ Add tasks to your Linear.app workspace directly from your browser popup.
 
 ## ⚙️ Features
 
-* **Quick Issue Creation**: Capture the current tab’s URL and title
-* **Editable Form**: Modify title and description before creating
-* **Searchable Dropdowns**: Find projects, teams, and assignees via keyboard-driven Combobox
-* **Persistent Defaults**: Remembers your last-used project and assignee
-* **Settings Page**: Configure your Linear API key in extension options
-* **Tech Stack**: Vite + React + TypeScript, Tailwind CSS v4, shadcn/ui, Sonner for toasts, pnpm
+- **Quick Issue Creation**: Capture the current tab’s URL and title
+- **Editable Form**: Modify title and description before creating
+- **Searchable Dropdowns**: Find projects, teams, and assignees via keyboard-driven Combobox
+- **Persistent Defaults**: Remembers your last-used project and assignee
+- **Settings Page**: Configure your Linear API key in extension options
+- **Tech Stack**: Vite + React + TypeScript, Tailwind CSS v4, shadcn/ui, Sonner for toasts, pnpm
 
 ## 📝 Prerequisites
 
 Ensure you have the following installed:
 
-* **Node.js** v16 or later
-* **pnpm** ([https://pnpm.io](https://pnpm.io))
-* **Chrome** (or any Chromium-based browser)
+- **Node.js** v16 or later
+- **pnpm** ([https://pnpm.io](https://pnpm.io))
+- **Chrome** (or any Chromium-based browser)
 
 ## 🚀 Installation & Development
 
@@ -40,20 +40,18 @@ Ensure you have the following installed:
    pnpm dev
    ```
 
-   * This starts Vite’s dev server.
-   * The extension bundle will be served at `localhost:3000` (or the port Vite chooses).
+   - This starts Vite’s dev server.
+   - The extension bundle will be served at `localhost:3000` (or the port Vite chooses).
 
 4. **Load unpacked extension**
-
-   * Open `chrome://extensions` in Chrome
-   * Enable **Developer mode**
-   * Click **Load unpacked**, and select your project’s `dist/` directory
+   - Open `chrome://extensions` in Chrome
+   - Enable **Developer mode**
+   - Click **Load unpacked**, and select your project’s `dist/` directory
 
 5. **Open the popup**
-
-   * Click the extension icon in the toolbar
-   * Configure your API key under **Settings** (⚙️ link at the bottom)
-   * Create issues using the form
+   - Click the extension icon in the toolbar
+   - Configure your API key under **Settings** (⚙️ link at the bottom)
+   - Create issues using the form
 
 ## 🔧 Project Structure
 
@@ -82,13 +80,13 @@ Ensure you have the following installed:
 
 ## 🎨 Styling
 
-* Uses **Tailwind CSS v4** for utility-first styling
-* **shadcn/ui** components for consistent UI primitives
-* **Sonner** for toast notifications
+- Uses **Tailwind CSS v4** for utility-first styling
+- **shadcn/ui** components for consistent UI primitives
+- **Sonner** for toast notifications
 
 ## 📦 Build & Publish
 
-* **Build for production**:
+- **Build for production**:
 
   ```bash
   pnpm build
@@ -96,8 +94,7 @@ Ensure you have the following installed:
 
   The output is in `dist/`.
 
-* **Publish to Chrome Web Store**:
-
+- **Publish to Chrome Web Store**:
   1. Zip the `dist/` directory.
   2. Upload via the Developer Dashboard: [https://chrome.google.com/webstore/developer/dashboard](https://chrome.google.com/webstore/developer/dashboard)
   3. Follow the on-screen instructions to set listing details and submit.
